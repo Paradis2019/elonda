@@ -1,9 +1,6 @@
 const path = require("path");
 
-/**
- * Load environment variables from backend/.env
- * (bulletproof for Windows + OneDrive)
- */
+// Load environment variables from backend/.env
 require("dotenv").config({
   path: path.join(__dirname, "..", ".env"),
 });
@@ -11,17 +8,17 @@ require("dotenv").config({
 const express = require("express");
 const cors = require("cors");
 
-// ROUTES
+// Routes
 const authRoutes = require("./routes/auth.routes");
 const usersRoutes = require("./routes/users.routes");
 
 const app = express();
 
-// MIDDLEWARE
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// HEALTH CHECK
+// Health check
 app.get("/health", (req, res) => {
   res.json({
     ok: true,
@@ -30,12 +27,14 @@ app.get("/health", (req, res) => {
   });
 });
 
-// API ROUTES
+// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoutes);
 
-// START SERVER
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`✅ Backend running on port ${PORT}`);
+// DECLARE PORT ONLY ONCE (VERY IMPORTANT)
+const PORT = Number(process.env.PORT) || 3001;
+
+// Start server
+app.listen(PORT, "127.0.0.1", () => {
+  console.log(`✅ Backend running on http://127.0.0.1:${PORT}`);
 });
